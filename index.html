@@ -238,10 +238,11 @@ body.custom-cursor-on, body.custom-cursor-on *{ cursor:none !important; }
   margin-bottom:32px; line-height:1.4;
 }
 
-.game-box{ position:relative; min-height:180px; }
+/* game-box: enough height so the dodging NO button always has room
+   clearly BELOW the YES button, never on top of it */
+.game-box{ position:relative; min-height:220px; }
 .btn-anchor{
-  position:absolute; top:0; left:50%; transform:translateX(-50%);
-  display:flex; gap:20px; flex-wrap:wrap; justify-content:center;
+  position:relative; display:flex; gap:20px; flex-wrap:wrap; justify-content:center;
 }
 
 .choice-btn{
@@ -258,18 +259,52 @@ body.custom-cursor-on, body.custom-cursor-on *{ cursor:none !important; }
 .yes-btn:hover{ transform:translateY(-2px) scale(1.03); }
 
 .no-btn{
-  position:absolute;
+  /* starts as a normal flex item, right next to YES.
+     JS switches it to position:absolute only once it needs to "dodge",
+     and always places it clearly below the card content — never overlapping YES. */
   background:linear-gradient(135deg, var(--coral), var(--pink));
   color:#2a0e18; box-shadow:0 8px 24px rgba(255,140,122,0.3);
   transition:left .32s cubic-bezier(.34,1.56,.64,1), top .32s cubic-bezier(.34,1.56,.64,1), transform .18s ease;
 }
+.no-btn.dodging{ position:absolute; }
 @media (prefers-reduced-motion: reduce){ .no-btn{ transition:transform .1s ease; } }
 
 .excuse-bubble{
-  margin-top:150px; min-height:26px; font-weight:600; font-size:14.5px;
+  margin-top:18px; min-height:26px; font-weight:600; font-size:14.5px;
   color:var(--gold); opacity:0; transition:opacity .25s ease;
 }
 .excuse-bubble.show{ opacity:1; }
+
+/* ============================================================
+   5b. HUG CELEBRATION OVERLAY
+   ============================================================ */
+.hug-overlay{
+  position:fixed; inset:0; z-index:70;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(7,42,61,0.55); backdrop-filter:blur(6px);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+}
+.hug-overlay.show{ opacity:1; }
+.hug-card{
+  display:flex; flex-direction:column; align-items:center; gap:14px;
+  transform:scale(.7); transition:transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.hug-overlay.show .hug-card{ transform:scale(1); }
+.hug-card img{
+  width:min(58vw, 240px); border-radius:26px;
+  box-shadow:0 24px 60px rgba(0,0,0,0.45);
+  border:3px solid rgba(255,255,255,0.5);
+}
+.hug-caption{
+  font-family:var(--font-head); font-style:italic; font-weight:600;
+  font-size:clamp(16px,3.6vw,20px); color:var(--white);
+  text-shadow:0 3px 16px rgba(0,0,0,0.4);
+}
+@media (prefers-reduced-motion: reduce){
+  .hug-overlay, .hug-card{ transition:opacity .2s ease; }
+  .hug-overlay.show .hug-card{ transform:scale(1); }
+}
 
 /* ============================================================
    6. FINAL STAGE (normal document flow)
@@ -335,7 +370,10 @@ section{ position:relative; padding:70px 20px; max-width:900px; margin:0 auto; }
     radial-gradient(circle at 30% 25%, rgba(255,255,255,0.5), transparent 45%),
     linear-gradient(140deg, var(--ocean-turq), var(--ocean-aqua));
   display:flex; align-items:center; justify-content:center;
-  font-size:34px;
+  font-size:34px; overflow:hidden;
+}
+.polaroid-photo img{
+  width:100%; height:100%; object-fit:cover; display:block;
 }
 .polaroid-caption{
   position:absolute; bottom:12px; left:0; right:0; text-align:center;
@@ -450,8 +488,7 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
 }
 
 @media (max-width:480px){
-  .game-box{ min-height:210px; }
-  .excuse-bubble{ margin-top:170px; }
+  .game-box{ min-height:240px; }
   section{ padding:54px 16px; }
 }
 </style>
@@ -479,6 +516,14 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
 <audio id="bgMusic" preload="none" loop>
   <source src="audio/romantic-instrumental.mp3" type="audio/mpeg">
 </audio>
+
+<!-- hug celebration overlay -->
+<div class="hug-overlay" id="hugOverlay" aria-hidden="true">
+  <div class="hug-card">
+    <img src="hug.png" alt="A warm hug">
+    <p class="hug-caption">Aa jao, hug time 🤗💙</p>
+  </div>
+</div>
 
 <!-- ============================================================
      INTRO SCREEN
@@ -533,18 +578,17 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
 
   <section class="photos-section reveal" aria-labelledby="photosTitle">
     <h2 class="section-title" id="photosTitle">A Few Little Moments</h2>
-    <!-- Placeholder polaroids — swap .polaroid-photo background for <img src="your-photo.jpg"> when ready -->
     <div class="polaroid-grid">
       <figure class="polaroid" style="--tilt:-4deg">
-        <div class="polaroid-photo" aria-hidden="true">😊</div>
-        <figcaption class="polaroid-caption">Our First Smile</figcaption>
+        <div class="polaroid-photo"><img src="hug.png" alt="A warm hug"></div>
+        <figcaption class="polaroid-caption">Our Warmest Hug</figcaption>
       </figure>
       <figure class="polaroid" style="--tilt:3deg">
-        <div class="polaroid-photo" aria-hidden="true">💙</div>
+        <div class="polaroid-photo"><img src="hug%20(1).png" alt="A tight hug"></div>
         <figcaption class="polaroid-caption">My Favorite Human</figcaption>
       </figure>
       <figure class="polaroid" style="--tilt:-2deg">
-        <div class="polaroid-photo" aria-hidden="true">✨</div>
+        <div class="polaroid-photo"><img src="hug%20(2).png" alt="A gentle hug"></div>
         <figcaption class="polaroid-caption">Forever Us</figcaption>
       </figure>
       <figure class="polaroid" style="--tilt:4deg">
@@ -796,6 +840,15 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
     "Only YES works"
   ];
 
+  /* Places the NO button exactly where it naturally sits in the flex
+     row (right beside YES) before it ever needs to "run away".
+     This prevents it from ever rendering on top of / behind YES. */
+  function settleNoBtn(noBtn) {
+    noBtn.classList.remove('dodging');
+    noBtn.style.left = '';
+    noBtn.style.top = '';
+  }
+
   function makeDodgeGame(boxSelector, yesId, noId, excuseId, excuses, onYes) {
     var box = document.querySelector(boxSelector);
     var yesBtn = document.getElementById(yesId);
@@ -815,8 +868,21 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
     function dodge() {
       var boxRect = box.getBoundingClientRect();
       var btnRect = noBtn.getBoundingClientRect();
+
+      // switch to free positioning only now, and start from where it
+      // currently sits so the very first dodge never teleports on top
+      // of the YES button
+      if (!noBtn.classList.contains('dodging')) {
+        noBtn.style.left = (btnRect.left - boxRect.left) + 'px';
+        noBtn.style.top = (btnRect.top - boxRect.top) + 'px';
+        noBtn.classList.add('dodging');
+        // force reflow so the browser registers the starting point
+        // before we animate to the new random spot
+        void noBtn.offsetWidth;
+      }
+
       var maxLeft = Math.max(boxRect.width - btnRect.width - 8, 8);
-      var minTop = 46;
+      var minTop = btnRect.height + 24; // always below the YES row
       var maxTop = Math.max(boxRect.height - btnRect.height - 8, minTop + 20);
       var newLeft = 8 + Math.random() * maxLeft;
       var newTop = minTop + Math.random() * (maxTop - minTop);
@@ -834,6 +900,9 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
     });
 
     yesBtn.addEventListener('click', onYes);
+
+    // make sure it always starts settled beside YES, never overlapping
+    settleNoBtn(noBtn);
   }
 
   /* ---------------------------------------------------------
@@ -849,6 +918,10 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
     setTimeout(function () {
       fromEl.hidden = true;
       toEl.hidden = false;
+      // re-settle the NO button for the screen we're entering, in case
+      // it was left mid-dodge from a previous visit
+      var settleTarget = toEl.querySelector('.no-btn');
+      if (settleTarget) settleNoBtn(settleTarget);
       requestAnimationFrame(function () { toEl.classList.add('active'); });
     }, reduceMotion ? 0 : 350);
   }
@@ -862,8 +935,10 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
   });
 
   makeDodgeGame('#stage2 .game-box', 'yes2', 'no2', 'excuse2', excusesStage2, function () {
-    burstHearts(24, ['💙','💗','✨','🩵','💛','🩷']);
-    setTimeout(enterFinalStage, reduceMotion ? 200 : 900);
+    showHugOverlay(function () {
+      burstHearts(24, ['💙','💗','✨','🩵','💛','🩷']);
+      setTimeout(enterFinalStage, reduceMotion ? 200 : 900);
+    });
   });
 
   function enterFinalStage() {
@@ -879,6 +954,20 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
 
   /* lock body scroll while intro/stage screens are active */
   document.body.style.overflow = 'hidden';
+
+  /* ---------------------------------------------------------
+     6b. HUG CELEBRATION OVERLAY
+  --------------------------------------------------------- */
+  function showHugOverlay(cb) {
+    var overlay = document.getElementById('hugOverlay');
+    overlay.classList.add('show');
+    var holdTime = reduceMotion ? 700 : 1400;
+    var fadeTime = reduceMotion ? 0 : 450;
+    setTimeout(function () {
+      overlay.classList.remove('show');
+      setTimeout(cb, fadeTime);
+    }, holdTime);
+  }
 
   /* ---------------------------------------------------------
      7. HEART BURST (confetti hearts)
