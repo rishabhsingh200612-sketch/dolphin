@@ -1,1 +1,1059 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>I Love You, My Dolphin 🐬💙</title>
+<meta name="description" content="A tiny world made only for you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   1. RESET & BASE
+   ============================================================ */
+:root{
+  --ocean-deep:#072a3d;
+  --ocean-turq:#0e6e77;
+  --ocean-aqua:#4fd1c7;
+  --ocean-sky:#8fd9f0;
+  --white:#ffffff;
+  --pink:#ff7eb6;
+  --coral:#ff8c7a;
+  --gold:#ffd166;
 
+  --font-head:'Playfair Display', Georgia, serif;
+  --font-body:'Quicksand', sans-serif;
+
+  --glass-bg: rgba(255,255,255,0.10);
+  --glass-border: rgba(255,255,255,0.28);
+}
+
+*{ box-sizing:border-box; margin:0; padding:0; }
+
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+body{
+  font-family:var(--font-body);
+  color:var(--white);
+  background:
+    radial-gradient(ellipse 120% 50% at 50% -10%, rgba(255,255,255,0.10), transparent 55%),
+    linear-gradient(165deg, var(--ocean-deep) 0%, var(--ocean-turq) 45%, var(--ocean-aqua) 78%, var(--ocean-sky) 100%);
+  background-size:100% 240%;
+  animation:oceanShift 22s ease-in-out infinite alternate;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+@keyframes oceanShift{
+  0%{ background-position:0% 0%; }
+  100%{ background-position:0% 30%; }
+}
+@media (prefers-reduced-motion: reduce){ body{ animation:none; } }
+
+img,svg{ display:block; max-width:100%; }
+button{ font-family:inherit; }
+ul{ list-style:none; }
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Hide native cursor only when our custom one is active (JS adds this class) */
+body.custom-cursor-on, body.custom-cursor-on *{ cursor:none !important; }
+
+/* ============================================================
+   2. AMBIENT BACKGROUND LAYERS
+   ============================================================ */
+.bg-fixed-layer{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+
+/* ---- waves ---- */
+.wave-layer{ height:22vh; bottom:0; top:auto; }
+.wave-layer svg{ width:220%; height:100%; animation:waveScroll 18s linear infinite; }
+.wave-layer svg.wave-back{ opacity:.35; animation-duration:26s; }
+@keyframes waveScroll{
+  from{ transform:translateX(0); }
+  to{ transform:translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .wave-layer svg{ animation:none; transform:translateX(-25%); }
+}
+
+/* ---- bubbles ---- */
+.bubble{
+  position:absolute; bottom:-10%;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0.04) 70%);
+  border:1px solid rgba(255,255,255,0.25);
+  animation:riseBubble linear infinite;
+  animation-duration:calc(var(--dur) * 1s);
+}
+@keyframes riseBubble{
+  0%{ transform:translate(0,0) scale(1); opacity:0; }
+  8%{ opacity:.85; }
+  100%{ transform:translate(var(--drift), -120vh) scale(1.2); opacity:0; }
+}
+@media (prefers-reduced-motion: reduce){ .bubble{ animation:none; opacity:0; } }
+
+/* ---- twinkling particles ---- */
+.particle{
+  position:absolute; border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 6px 1px var(--gold);
+  animation:twinkle ease-in-out infinite;
+  animation-duration:calc(var(--tdur) * 1s);
+  animation-delay:var(--tdelay);
+  opacity:.2;
+}
+@keyframes twinkle{
+  0%,100%{ opacity:.15; transform:scale(.8); }
+  50%{ opacity:.8; transform:scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce){ .particle{ animation:none; opacity:.3; } }
+
+/* ---- floating hearts (ambient) ---- */
+.floating-heart{
+  position:absolute; bottom:-8%;
+  font-size:var(--fsz);
+  animation:floatHeart linear forwards;
+  animation-duration:calc(var(--fdur) * 1s);
+  opacity:0;
+}
+@keyframes floatHeart{
+  0%{ transform:translate(0,0) rotate(0deg); opacity:0; }
+  10%{ opacity:.85; }
+  100%{ transform:translate(var(--fdrift), -110vh) rotate(var(--frot)); opacity:0; }
+}
+
+/* ---- ambient swimming dolphins ---- */
+.swim-dolphin{
+  position:absolute; width:64px;
+  animation:swimAcross linear forwards;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+  opacity:.9;
+}
+@keyframes swimAcross{
+  0%{ transform:translateX(-10vw) translateY(0) scaleX(var(--flip)); }
+  50%{ transform:translateX(50vw) translateY(-14px) scaleX(var(--flip)); }
+  100%{ transform:translateX(110vw) translateY(0) scaleX(var(--flip)); }
+}
+
+/* ---- stars (final stage only) ---- */
+.star-layer{ opacity:0; transition:opacity 1.4s ease; }
+.star-layer.show{ opacity:1; }
+.star{
+  position:absolute; border-radius:50%; background:var(--white);
+  animation:starTwinkle ease-in-out infinite;
+  animation-duration:calc(var(--sdur) * 1s);
+}
+@keyframes starTwinkle{
+  0%,100%{ opacity:.25; }
+  50%{ opacity:1; }
+}
+@media (prefers-reduced-motion: reduce){
+  .swim-dolphin, .floating-heart{ display:none; }
+  .star{ animation:none; opacity:.6; }
+}
+
+/* ============================================================
+   3. CUSTOM CURSOR
+   ============================================================ */
+.heart-cursor{
+  position:fixed; top:0; left:0; z-index:9999;
+  font-size:18px; pointer-events:none;
+  transform:translate(-50%,-50%);
+  opacity:0; transition:opacity .25s ease, transform .05s linear;
+  filter:drop-shadow(0 0 6px rgba(111,224,230,0.6));
+}
+.heart-cursor.visible{ opacity:1; }
+
+/* ============================================================
+   4. MUSIC BUTTON
+   ============================================================ */
+.music-btn{
+  position:fixed; top:18px; right:18px; z-index:50;
+  width:52px; height:52px; border-radius:50%; border:1.5px solid var(--glass-border);
+  background:var(--glass-bg); backdrop-filter:blur(10px);
+  color:var(--white); font-size:20px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+  transition:transform .2s ease;
+  overflow:hidden;
+}
+.music-btn:hover{ transform:scale(1.08); }
+.music-btn:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+.music-btn[aria-pressed="true"]{ animation:musicPulse 1.6s ease-in-out infinite; }
+@keyframes musicPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(255,209,102,0.5);} 50%{ box-shadow:0 0 0 10px rgba(255,209,102,0);} }
+@media (prefers-reduced-motion: reduce){ .music-btn[aria-pressed="true"]{ animation:none; } }
+
+/* ============================================================
+   5. OVERLAY SCREENS (intro / stage1 / stage2)
+   ============================================================ */
+.overlay-screen{
+  position:fixed; inset:0; z-index:10;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:24px;
+  opacity:0; pointer-events:none;
+  transition:opacity .7s ease;
+}
+.overlay-screen.active{ opacity:1; pointer-events:auto; }
+.overlay-screen[hidden]{ display:none; }
+
+.hero-title{
+  font-family:var(--font-head); font-weight:700; font-style:italic;
+  font-size:clamp(30px, 7vw, 54px); line-height:1.2;
+  text-shadow:0 4px 30px rgba(0,0,0,0.25);
+}
+.accent-heart{ color:var(--pink); font-style:normal; }
+.hero-sub{
+  margin-top:16px; font-size:clamp(15px,3vw,18px); font-weight:500;
+  color:rgba(255,255,255,0.85); font-style:italic;
+}
+
+.primary-btn{
+  margin-top:34px; position:relative; overflow:hidden;
+  font-weight:700; font-size:16px; letter-spacing:.02em;
+  padding:16px 36px; border:none; border-radius:999px; cursor:pointer;
+  background:linear-gradient(135deg, var(--pink), var(--coral));
+  color:#2a0e18;
+  box-shadow:0 10px 28px rgba(255,126,182,0.35);
+  transition:transform .2s ease;
+}
+.primary-btn:hover{ transform:translateY(-3px) scale(1.03); }
+.primary-btn:active{ transform:translateY(0) scale(.98); }
+.primary-btn:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+
+/* ---- glass card ---- */
+.glass-card{
+  background:var(--glass-bg); backdrop-filter:blur(16px);
+  border:1px solid var(--glass-border);
+  border-radius:28px;
+  padding:clamp(24px,5vw,44px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.25);
+  max-width:560px; width:100%;
+}
+
+.question-text{
+  font-family:var(--font-head); font-weight:600; font-size:clamp(21px,4.6vw,29px);
+  margin-bottom:32px; line-height:1.4;
+}
+
+.game-box{ position:relative; min-height:180px; }
+.btn-anchor{
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  display:flex; gap:20px; flex-wrap:wrap; justify-content:center;
+}
+
+.choice-btn{
+  position:relative; overflow:hidden;
+  font-weight:700; font-size:16px; padding:14px 28px; border:none; border-radius:999px;
+  cursor:pointer; transition:transform .18s ease, box-shadow .18s ease;
+}
+.choice-btn:focus-visible{ outline:3px solid var(--gold); outline-offset:3px; }
+
+.yes-btn{
+  background:linear-gradient(135deg, var(--ocean-aqua), #2fb8ae);
+  color:#04252a; box-shadow:0 8px 24px rgba(79,209,199,0.35);
+}
+.yes-btn:hover{ transform:translateY(-2px) scale(1.03); }
+
+.no-btn{
+  position:absolute;
+  background:linear-gradient(135deg, var(--coral), var(--pink));
+  color:#2a0e18; box-shadow:0 8px 24px rgba(255,140,122,0.3);
+  transition:left .32s cubic-bezier(.34,1.56,.64,1), top .32s cubic-bezier(.34,1.56,.64,1), transform .18s ease;
+}
+@media (prefers-reduced-motion: reduce){ .no-btn{ transition:transform .1s ease; } }
+
+.excuse-bubble{
+  margin-top:150px; min-height:26px; font-weight:600; font-size:14.5px;
+  color:var(--gold); opacity:0; transition:opacity .25s ease;
+}
+.excuse-bubble.show{ opacity:1; }
+
+/* ============================================================
+   6. FINAL STAGE (normal document flow)
+   ============================================================ */
+.final-stage{ position:relative; z-index:5; }
+.final-stage[hidden]{ display:none; }
+
+section{ position:relative; padding:70px 20px; max-width:900px; margin:0 auto; }
+
+.section-title{
+  font-family:var(--font-head); font-style:italic; font-weight:600;
+  font-size:clamp(24px,5vw,34px); text-align:center; margin-bottom:38px;
+  color:var(--white); text-shadow:0 3px 20px rgba(0,0,0,0.25);
+}
+
+/* ---- letter ---- */
+.letter-section{ text-align:center; padding-top:90px; }
+.big-heart{
+  font-size:52px; margin-bottom:22px;
+  animation:pulseHeart 1.8s ease-in-out infinite;
+}
+@keyframes pulseHeart{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.15); } }
+@media (prefers-reduced-motion: reduce){ .big-heart{ animation:none; } }
+
+.letter-text{
+  font-family:var(--font-head); font-style:italic; font-weight:500;
+  font-size:clamp(17px,3.6vw,22px); line-height:1.9; text-align:left;
+  max-width:640px; margin:0 auto; white-space:pre-wrap;
+  min-height:260px;
+}
+.type-cursor{
+  display:inline-block; width:2px; height:1em; background:var(--gold);
+  margin-left:2px; vertical-align:-2px; animation:blink 1s step-end infinite;
+}
+@keyframes blink{ 50%{ opacity:0; } }
+
+/* ---- reveal-on-scroll base ---- */
+.reveal{ opacity:0; transform:translateY(36px); transition:opacity .8s ease, transform .8s ease; }
+.reveal.in-view{ opacity:1; transform:translateY(0); }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ transition:opacity .3s ease; transform:none; }
+}
+
+/* ---- photo carousel ---- */
+.polaroid-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(170px,1fr));
+  gap:26px; padding:0 6px;
+}
+.polaroid{
+  background:var(--white); border-radius:6px; padding:12px 12px 44px;
+  box-shadow:0 14px 30px rgba(0,0,0,0.3);
+  transform:rotate(var(--tilt));
+  transition:transform .3s ease, box-shadow .3s ease;
+  position:relative;
+}
+.polaroid:hover, .polaroid:focus-within{
+  transform:rotate(0deg) translateY(-8px) scale(1.03);
+  box-shadow:0 22px 44px rgba(0,0,0,0.35);
+}
+.polaroid-photo{
+  width:100%; aspect-ratio:1/1; border-radius:2px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.5), transparent 45%),
+    linear-gradient(140deg, var(--ocean-turq), var(--ocean-aqua));
+  display:flex; align-items:center; justify-content:center;
+  font-size:34px;
+}
+.polaroid-caption{
+  position:absolute; bottom:12px; left:0; right:0; text-align:center;
+  font-family:var(--font-head); font-style:italic; font-size:13.5px; color:#173a3d;
+}
+
+/* ---- timeline ---- */
+.timeline{
+  position:relative; max-width:520px; margin:0 auto;
+  padding-left:28px; border-left:2px solid rgba(255,255,255,0.35);
+}
+.timeline li{
+  position:relative; padding:0 0 34px 22px;
+  opacity:0; transform:translateX(-16px);
+  transition:opacity .6s ease, transform .6s ease;
+}
+.timeline li.in-view{ opacity:1; transform:translateX(0); }
+.timeline li::before{
+  content:attr(data-icon);
+  position:absolute; left:-40px; top:-2px;
+  width:32px; height:32px; border-radius:50%;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  display:flex; align-items:center; justify-content:center; font-size:15px;
+}
+.timeline .t-label{ font-weight:700; font-size:15.5px; }
+.timeline .t-date{ font-size:12.5px; color:rgba(255,255,255,0.65); margin-top:2px; }
+@media (prefers-reduced-motion: reduce){ .timeline li{ transition:opacity .3s ease; transform:none; } }
+
+/* ---- love meter ---- */
+.meter-section{ text-align:center; }
+.meter-bar{
+  width:100%; max-width:480px; height:20px; border-radius:999px;
+  background:rgba(255,255,255,0.15); border:1px solid var(--glass-border);
+  margin:0 auto; overflow:hidden;
+}
+.meter-fill{
+  height:100%; width:0%; border-radius:999px;
+  background:linear-gradient(90deg, var(--pink), var(--gold), var(--coral));
+  background-size:200% 100%;
+  transition:width 1.4s cubic-bezier(.2,.9,.3,1);
+  animation:meterShine 3s linear infinite;
+}
+@keyframes meterShine{ 0%{ background-position:0% 0; } 100%{ background-position:200% 0; } }
+.meter-value{
+  font-family:var(--font-head); font-weight:700; font-size:clamp(26px,6vw,40px);
+  margin-top:20px; color:var(--gold);
+}
+.meter-label{ margin-top:6px; font-size:13.5px; color:rgba(255,255,255,0.75); }
+
+/* ---- promises ---- */
+.promise-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+  gap:20px;
+}
+.promise-card{
+  background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:20px;
+  padding:22px 18px; text-align:center; font-weight:600; font-size:14.5px;
+  backdrop-filter:blur(10px);
+  animation:floatCard ease-in-out infinite;
+  animation-duration:calc(4s + var(--fi) * 0.4s);
+}
+@keyframes floatCard{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-8px); } }
+@media (prefers-reduced-motion: reduce){ .promise-card{ animation:none; } }
+
+/* ---- reply ---- */
+.reply-card{ margin:0 auto; text-align:left; }
+.reply-card .section-title{ text-align:left; }
+textarea{
+  width:100%; min-height:120px; resize:vertical; border-radius:18px;
+  border:1.5px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.08);
+  color:var(--white); font-family:var(--font-body); font-size:15px;
+  padding:16px 18px; line-height:1.5; outline:none;
+  transition:border-color .2s ease, background .2s ease;
+}
+textarea::placeholder{ color:rgba(255,255,255,0.5); }
+textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
+
+.toast{
+  margin-top:14px; min-height:20px; font-size:13.5px; color:var(--gold);
+  opacity:0; transition:opacity .3s ease;
+}
+.toast.show{ opacity:1; }
+
+/* ---- footer ---- */
+.site-footer{ text-align:center; padding:50px 20px 70px; }
+.waving-dolphin{ font-size:30px; margin-top:10px; display:inline-block; animation:wave 2.2s ease-in-out infinite; }
+@keyframes wave{ 0%,100%{ transform:rotate(0deg); } 25%{ transform:rotate(14deg); } 75%{ transform:rotate(-10deg); } }
+@media (prefers-reduced-motion: reduce){ .waving-dolphin{ animation:none; } }
+
+/* ---- ripple effect ---- */
+.ripple{
+  position:absolute; border-radius:50%; background:rgba(255,255,255,0.55);
+  transform:scale(0); animation:rippleAnim .6s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes rippleAnim{ to{ transform:scale(3.2); opacity:0; } }
+@media (prefers-reduced-motion: reduce){ .ripple{ display:none; } }
+
+/* ---- heart burst particles ---- */
+.heart-particle{
+  position:fixed; left:50%; top:50%; font-size:22px; z-index:60;
+  opacity:0; transform:translate(-50%,-50%);
+  animation:burst 1.2s ease-out forwards; animation-delay:var(--d);
+}
+@keyframes burst{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(.3); }
+  15%{ opacity:1; }
+  100%{ opacity:0; transform:translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.2) rotate(var(--r)); }
+}
+@media (prefers-reduced-motion: reduce){
+  .heart-particle{ animation:none; opacity:.85; transform:translate(-50%,-50%); }
+}
+
+@media (max-width:480px){
+  .game-box{ min-height:210px; }
+  .excuse-bubble{ margin-top:170px; }
+  section{ padding:54px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     BACKGROUND / AMBIENT LAYERS
+     ============================================================ -->
+<div class="bg-fixed-layer wave-layer" aria-hidden="true">
+  <svg class="wave-back" viewBox="0 0 1600 200" preserveAspectRatio="none"><path d="M0,100 C 200,180 400,20 600,100 C 800,180 1000,20 1200,100 C 1400,180 1600,20 1800,100 L1800,200 L0,200 Z" fill="rgba(255,255,255,0.10)"/></svg>
+  <svg viewBox="0 0 1600 200" preserveAspectRatio="none" style="margin-top:-14vh"><path d="M0,110 C 200,40 400,170 600,110 C 800,40 1000,170 1200,110 C 1400,40 1600,170 1800,110 L1800,200 L0,200 Z" fill="rgba(255,255,255,0.16)"/></svg>
+</div>
+<div class="bg-fixed-layer" id="bubbleLayer" aria-hidden="true"></div>
+<div class="bg-fixed-layer" id="particleLayer" aria-hidden="true"></div>
+<div class="bg-fixed-layer" id="heartsLayer" aria-hidden="true"></div>
+<div class="bg-fixed-layer" id="dolphinLayer" aria-hidden="true"></div>
+<div class="bg-fixed-layer star-layer" id="starLayer" aria-hidden="true"></div>
+
+<!-- custom cursor -->
+<div class="heart-cursor" id="heartCursor" aria-hidden="true">💙</div>
+
+<!-- music -->
+<button id="musicBtn" class="music-btn" aria-label="Play romantic background music" aria-pressed="false">🎵</button>
+<audio id="bgMusic" preload="none" loop>
+  <source src="audio/romantic-instrumental.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ============================================================
+     INTRO SCREEN
+     ============================================================ -->
+<section id="intro" class="overlay-screen active">
+  <h1 class="hero-title">I Love You,<br>My Dolphin <span class="accent-heart">🐬</span></h1>
+  <p class="hero-sub">I made a tiny world only for you...</p>
+  <button type="button" class="primary-btn" id="startBtn">Start Our Little Journey ❤️</button>
+</section>
+
+<!-- ============================================================
+     STAGE 1
+     ============================================================ -->
+<section id="stage1" class="overlay-screen" hidden>
+  <div class="glass-card">
+    <p class="question-text">Do you love me? 🥺</p>
+    <div class="game-box">
+      <div class="btn-anchor">
+        <button type="button" class="choice-btn yes-btn" id="yes1">YES ❤️</button>
+        <button type="button" class="choice-btn no-btn" id="no1">NO 🙈</button>
+      </div>
+      <p class="excuse-bubble" id="excuse1" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STAGE 2
+     ============================================================ -->
+<section id="stage2" class="overlay-screen" hidden>
+  <div class="glass-card">
+    <p class="question-text">Kya tum hamesha aise hi mera saath rahoge? 💙</p>
+    <div class="game-box">
+      <div class="btn-anchor">
+        <button type="button" class="choice-btn yes-btn" id="yes2">YES 💍</button>
+        <button type="button" class="choice-btn no-btn" id="no2">NO 🙈</button>
+      </div>
+      <p class="excuse-bubble" id="excuse2" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FINAL STAGE
+     ============================================================ -->
+<main id="finalStage" class="final-stage" hidden>
+
+  <section class="letter-section">
+    <div class="big-heart" aria-hidden="true">💙</div>
+    <p class="letter-text" id="letterText" aria-live="polite"><span class="type-cursor" id="typeCursor"></span></p>
+  </section>
+
+  <section class="photos-section reveal" aria-labelledby="photosTitle">
+    <h2 class="section-title" id="photosTitle">A Few Little Moments</h2>
+    <!-- Placeholder polaroids — swap .polaroid-photo background for <img src="your-photo.jpg"> when ready -->
+    <div class="polaroid-grid">
+      <figure class="polaroid" style="--tilt:-4deg">
+        <div class="polaroid-photo" aria-hidden="true">😊</div>
+        <figcaption class="polaroid-caption">Our First Smile</figcaption>
+      </figure>
+      <figure class="polaroid" style="--tilt:3deg">
+        <div class="polaroid-photo" aria-hidden="true">💙</div>
+        <figcaption class="polaroid-caption">My Favorite Human</figcaption>
+      </figure>
+      <figure class="polaroid" style="--tilt:-2deg">
+        <div class="polaroid-photo" aria-hidden="true">✨</div>
+        <figcaption class="polaroid-caption">Forever Us</figcaption>
+      </figure>
+      <figure class="polaroid" style="--tilt:4deg">
+        <div class="polaroid-photo" aria-hidden="true">🐬</div>
+        <figcaption class="polaroid-caption">My Dolphin</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="timeline-section reveal" aria-labelledby="timelineTitle">
+    <h2 class="section-title" id="timelineTitle">Our Story So Far</h2>
+    <ul class="timeline">
+      <li data-icon="❤️"><div class="t-label">The day we met</div><div class="t-date">Where it all began</div></li>
+      <li data-icon="🌸"><div class="t-label">First conversation</div><div class="t-date">Butterflies started here</div></li>
+      <li data-icon="🌊"><div class="t-label">First laugh</div><div class="t-date">I knew I was in trouble</div></li>
+      <li data-icon="✨"><div class="t-label">Today</div><div class="t-date">Still choosing you</div></li>
+      <li data-icon="∞"><div class="t-label">Forever</div><div class="t-date">And everything after</div></li>
+    </ul>
+  </section>
+
+  <section class="meter-section reveal" aria-labelledby="meterTitle">
+    <h2 class="section-title" id="meterTitle">Love Meter</h2>
+    <div class="meter-bar" role="img" aria-label="Love meter, overflowing">
+      <div class="meter-fill" id="meterFill"></div>
+    </div>
+    <p class="meter-value" id="meterValue">0%</p>
+    <p class="meter-label">Error: Love overflow detected ❤️</p>
+  </section>
+
+  <section class="promises-section reveal" aria-labelledby="promiseTitle">
+    <h2 class="section-title" id="promiseTitle">My Promises To You</h2>
+    <div class="promise-grid">
+      <div class="promise-card" style="--fi:0">I'll always listen. 👂💙</div>
+      <div class="promise-card" style="--fi:1">I'll annoy you forever. 😄</div>
+      <div class="promise-card" style="--fi:2">I'll protect your smile. 🛡️</div>
+      <div class="promise-card" style="--fi:3">I'll celebrate every little win. 🎉</div>
+      <div class="promise-card" style="--fi:4">I'll hold your hand through every storm. 🌊</div>
+    </div>
+  </section>
+
+  <section class="reply-section reveal" aria-labelledby="replyTitle">
+    <div class="glass-card reply-card">
+      <h2 class="section-title" id="replyTitle">Now it's your turn ❤️</h2>
+      <label class="sr-only" for="replyBox">Your reply</label>
+      <textarea id="replyBox" placeholder="Write anything your heart wants..."></textarea>
+      <button type="button" class="primary-btn" id="sendBtn">Bhej do Instagram par</button>
+      <p class="toast" id="sendToast" role="status"></p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Made with infinite love ❤️</p>
+    <div class="waving-dolphin" aria-hidden="true">🐬👋</div>
+  </footer>
+
+</main>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------------------------------------------------
+     0. HELPERS
+  --------------------------------------------------------- */
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function rand(min, max) { return min + Math.random() * (max - min); }
+
+  /* ---------------------------------------------------------
+     1. RIPPLE EFFECT ON BUTTONS
+  --------------------------------------------------------- */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('.primary-btn, .choice-btn, .music-btn');
+    if (!btn || reduceMotion) return;
+    var rect = btn.getBoundingClientRect();
+    var size = Math.max(rect.width, rect.height);
+    var ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.style.position = btn.style.position || 'relative';
+    btn.appendChild(ripple);
+    setTimeout(function () { ripple.remove(); }, 650);
+  });
+
+  /* ---------------------------------------------------------
+     2. AMBIENT BACKGROUND: bubbles, particles, floating hearts, dolphins
+  --------------------------------------------------------- */
+  var bubbleLayer = document.getElementById('bubbleLayer');
+  var particleLayer = document.getElementById('particleLayer');
+  var heartsLayer = document.getElementById('heartsLayer');
+  var dolphinLayer = document.getElementById('dolphinLayer');
+  var starLayer = document.getElementById('starLayer');
+
+  function spawnBubbles() {
+    var count = reduceMotion ? 6 : 20;
+    for (var i = 0; i < count; i++) {
+      var b = document.createElement('div');
+      b.className = 'bubble';
+      var size = 6 + Math.random() * 20;
+      b.style.width = size + 'px';
+      b.style.height = size + 'px';
+      b.style.left = (Math.random() * 100) + '%';
+      b.style.setProperty('--dur', (11 + Math.random() * 13).toFixed(1));
+      b.style.setProperty('--drift', (Math.random() * 50 - 25) + 'px');
+      b.style.animationDelay = (Math.random() * 13).toFixed(1) + 's';
+      bubbleLayer.appendChild(b);
+    }
+  }
+
+  function spawnParticles() {
+    var count = reduceMotion ? 10 : 30;
+    for (var i = 0; i < count; i++) {
+      var p = document.createElement('div');
+      p.className = 'particle';
+      var size = 2 + Math.random() * 3;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.top = (Math.random() * 100) + '%';
+      p.style.setProperty('--tdur', (2 + Math.random() * 3).toFixed(1));
+      p.style.setProperty('--tdelay', (Math.random() * 4).toFixed(1) + 's');
+      particleLayer.appendChild(p);
+    }
+  }
+
+  function spawnFloatingHeart() {
+    if (reduceMotion) return;
+    var h = document.createElement('div');
+    h.className = 'floating-heart';
+    var icons = ['💙','💗','✨'];
+    h.textContent = icons[Math.floor(Math.random() * icons.length)];
+    h.style.left = (Math.random() * 100) + '%';
+    h.style.setProperty('--fsz', (14 + Math.random() * 14) + 'px');
+    h.style.setProperty('--fdur', (8 + Math.random() * 8).toFixed(1));
+    h.style.setProperty('--fdrift', (Math.random() * 80 - 40) + 'px');
+    h.style.setProperty('--frot', (Math.random() * 60 - 30) + 'deg');
+    heartsLayer.appendChild(h);
+    setTimeout(function () { h.remove(); }, 17000);
+  }
+
+  function spawnDolphin() {
+    if (reduceMotion) return;
+    var d = document.createElement('div');
+    d.className = 'swim-dolphin';
+    d.innerHTML = '<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg"><path d="M8 92 C 30 40, 90 15, 140 24 C 160 27, 172 18, 188 6 C 182 26, 168 38, 154 44 C 172 50, 186 62, 192 80 C 172 68, 150 62, 132 66 C 108 72, 60 96, 30 108 C 44 96, 54 84, 52 74 C 40 82, 22 88, 8 92 Z" fill="#eaf8f7" opacity="0.9"/></svg>';
+    var top = rand(6, 70);
+    d.style.top = top + '%';
+    d.style.setProperty('--flip', Math.random() > 0.5 ? '1' : '-1');
+    var dur = rand(14, 22);
+    d.style.animationDuration = dur + 's';
+    dolphinLayer.appendChild(d);
+    setTimeout(function () { d.remove(); }, dur * 1000 + 200);
+  }
+
+  function spawnStars() {
+    var count = 60;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement('div');
+      s.className = 'star';
+      var size = 1 + Math.random() * 2.4;
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.left = (Math.random() * 100) + '%';
+      s.style.top = (Math.random() * 100) + '%';
+      s.style.setProperty('--sdur', (2 + Math.random() * 3).toFixed(1));
+      starLayer.appendChild(s);
+    }
+  }
+
+  spawnBubbles();
+  spawnParticles();
+  spawnStars();
+  if (!reduceMotion) {
+    setInterval(spawnFloatingHeart, 2600);
+    setInterval(spawnDolphin, rand(14000, 20000));
+    setTimeout(spawnDolphin, 3000);
+  }
+
+  /* ---------------------------------------------------------
+     3. CUSTOM CURSOR (desktop, fine pointer, motion allowed)
+  --------------------------------------------------------- */
+  var cursorEnabled = window.matchMedia('(pointer: fine)').matches && !reduceMotion;
+  if (cursorEnabled) {
+    var cursorEl = document.getElementById('heartCursor');
+    document.body.classList.add('custom-cursor-on');
+    document.addEventListener('mousemove', function (e) {
+      cursorEl.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px) translate(-50%,-50%)';
+      cursorEl.classList.add('visible');
+    });
+    document.addEventListener('mouseleave', function () { cursorEl.classList.remove('visible'); });
+  }
+
+  /* ---------------------------------------------------------
+     4. MUSIC TOGGLE (never autoplays)
+  --------------------------------------------------------- */
+  var musicBtn = document.getElementById('musicBtn');
+  var bgMusic = document.getElementById('bgMusic');
+  var isPlaying = false;
+  musicBtn.addEventListener('click', function () {
+    if (!isPlaying) {
+      var playPromise = bgMusic.play();
+      if (playPromise && playPromise.catch) {
+        playPromise.then(function () {
+          isPlaying = true;
+          musicBtn.textContent = '🔊';
+          musicBtn.setAttribute('aria-pressed', 'true');
+          musicBtn.setAttribute('aria-label', 'Pause background music');
+        }).catch(function () {
+          musicBtn.textContent = '🔇';
+          musicBtn.title = "Music file not found — add your track to audio/romantic-instrumental.mp3";
+        });
+      }
+    } else {
+      bgMusic.pause();
+      isPlaying = false;
+      musicBtn.textContent = '🎵';
+      musicBtn.setAttribute('aria-pressed', 'false');
+      musicBtn.setAttribute('aria-label', 'Play background music');
+    }
+  });
+
+  /* ---------------------------------------------------------
+     5. DODGE-BUTTON GAME (Stage 1 & Stage 2)
+  --------------------------------------------------------- */
+  var excusesStage1 = [
+    "System ne allow nahi kiya 😌",
+    "Dil ne veto laga diya 🚫",
+    "Error 404: No not found",
+    "Dolphin disagrees 🐬",
+    "Mission failed 😂",
+    "Wrong answer detected",
+    "Retry after loving me ❤️",
+    "Universe said nope ✨",
+    "Hahaha nice try",
+    "Ye button sharma gaya"
+  ];
+  var excusesStage2 = [
+    "Future already booked 💙",
+    "Permission denied",
+    "Love contract signed",
+    "Dolphin approved only YES",
+    "No cancelled",
+    "Heart says impossible",
+    "Romance police stopped this",
+    "Only YES works"
+  ];
+
+  function makeDodgeGame(boxSelector, yesId, noId, excuseId, excuses, onYes) {
+    var box = document.querySelector(boxSelector);
+    var yesBtn = document.getElementById(yesId);
+    var noBtn = document.getElementById(noId);
+    var excuseEl = document.getElementById(excuseId);
+    var lastIdx = -1;
+
+    function showExcuse() {
+      var idx;
+      do { idx = Math.floor(Math.random() * excuses.length); }
+      while (idx === lastIdx && excuses.length > 1);
+      lastIdx = idx;
+      excuseEl.textContent = excuses[idx];
+      excuseEl.classList.add('show');
+    }
+
+    function dodge() {
+      var boxRect = box.getBoundingClientRect();
+      var btnRect = noBtn.getBoundingClientRect();
+      var maxLeft = Math.max(boxRect.width - btnRect.width - 8, 8);
+      var minTop = 46;
+      var maxTop = Math.max(boxRect.height - btnRect.height - 8, minTop + 20);
+      var newLeft = 8 + Math.random() * maxLeft;
+      var newTop = minTop + Math.random() * (maxTop - minTop);
+      noBtn.style.left = newLeft + 'px';
+      noBtn.style.top = newTop + 'px';
+      showExcuse();
+    }
+
+    noBtn.addEventListener('pointerenter', dodge);
+    noBtn.addEventListener('focus', dodge);
+    noBtn.addEventListener('pointerdown', function (e) { e.preventDefault(); dodge(); });
+    noBtn.addEventListener('click', function (e) { e.preventDefault(); dodge(); });
+    noBtn.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dodge(); }
+    });
+
+    yesBtn.addEventListener('click', onYes);
+  }
+
+  /* ---------------------------------------------------------
+     6. SCREEN NAVIGATION
+  --------------------------------------------------------- */
+  var introEl = document.getElementById('intro');
+  var stage1El = document.getElementById('stage1');
+  var stage2El = document.getElementById('stage2');
+  var finalStageEl = document.getElementById('finalStage');
+
+  function switchScreen(fromEl, toEl) {
+    fromEl.classList.remove('active');
+    setTimeout(function () {
+      fromEl.hidden = true;
+      toEl.hidden = false;
+      requestAnimationFrame(function () { toEl.classList.add('active'); });
+    }, reduceMotion ? 0 : 350);
+  }
+
+  document.getElementById('startBtn').addEventListener('click', function () {
+    switchScreen(introEl, stage1El);
+  });
+
+  makeDodgeGame('#stage1 .game-box', 'yes1', 'no1', 'excuse1', excusesStage1, function () {
+    switchScreen(stage1El, stage2El);
+  });
+
+  makeDodgeGame('#stage2 .game-box', 'yes2', 'no2', 'excuse2', excusesStage2, function () {
+    burstHearts(24, ['💙','💗','✨','🩵','💛','🩷']);
+    setTimeout(enterFinalStage, reduceMotion ? 200 : 900);
+  });
+
+  function enterFinalStage() {
+    stage2El.classList.remove('active');
+    stage2El.hidden = true;
+    document.body.style.overflow = 'auto';
+    finalStageEl.hidden = false;
+    starLayer.classList.add('show');
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    startTypewriter();
+    initScrollReveal();
+  }
+
+  /* lock body scroll while intro/stage screens are active */
+  document.body.style.overflow = 'hidden';
+
+  /* ---------------------------------------------------------
+     7. HEART BURST (confetti hearts)
+  --------------------------------------------------------- */
+  function burstHearts(count, icons) {
+    if (reduceMotion) return;
+    for (var i = 0; i < count; i++) {
+      var h = document.createElement('span');
+      h.className = 'heart-particle';
+      h.textContent = icons[i % icons.length];
+      var angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+      var dist = 90 + Math.random() * 160;
+      h.style.setProperty('--x', (Math.cos(angle) * dist) + 'px');
+      h.style.setProperty('--y', (Math.sin(angle) * dist - 40) + 'px');
+      h.style.setProperty('--r', (Math.random() * 80 - 40) + 'deg');
+      h.style.setProperty('--d', (i * 0.02) + 's');
+      document.body.appendChild(h);
+      (function (el) { setTimeout(function () { el.remove(); }, 1500); })(h);
+    }
+  }
+
+  /* ---------------------------------------------------------
+     8. TYPEWRITER LETTER
+  --------------------------------------------------------- */
+  var letterText =
+"I love you,\nmera baccha.\n\n" +
+"Thank you for making ordinary days feel magical.\n\n" +
+"Every smile of yours becomes my favorite memory.\n\n" +
+"I don't promise a perfect life,\nbut I promise to keep choosing you every single day.\n\n" +
+"No matter how many waves come,\nI'll always swim back to you.\n\n" +
+"Will you continue writing our story with me?\n\n" +
+"Forever yours,\n❤️";
+
+  function startTypewriter() {
+    var el = document.getElementById('letterText');
+    var cursor = document.getElementById('typeCursor');
+    if (reduceMotion) {
+      el.textContent = letterText;
+      el.appendChild(cursor);
+      return;
+    }
+    var i = 0;
+    el.textContent = '';
+    el.appendChild(cursor);
+    function tick() {
+      if (i >= letterText.length) return;
+      var ch = letterText.charAt(i);
+      el.insertBefore(document.createTextNode(ch), cursor);
+      i++;
+      var delay = 26;
+      if (ch === '\n') delay = 340;
+      if (ch === '.' || ch === ',') delay = 160;
+      setTimeout(tick, delay);
+    }
+    tick();
+  }
+
+  /* ---------------------------------------------------------
+     9. SCROLL REVEAL (sections + timeline items) & LOVE METER
+  --------------------------------------------------------- */
+  function initScrollReveal() {
+    var revealEls = finalStageEl.querySelectorAll('.reveal');
+    var timelineItems = finalStageEl.querySelectorAll('.timeline li');
+    var meterSection = document.querySelector('.meter-section');
+    var meterStarted = false;
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      revealEls.forEach(function (el) { el.classList.add('in-view'); });
+      timelineItems.forEach(function (el) { el.classList.add('in-view'); });
+      runLoveMeter();
+      return;
+    }
+
+    var sectionObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          sectionObs.unobserve(entry.target);
+          if (entry.target === meterSection && !meterStarted) {
+            meterStarted = true;
+            runLoveMeter();
+          }
+        }
+      });
+    }, { threshold: 0.3 });
+    revealEls.forEach(function (el) { sectionObs.observe(el); });
+
+    var itemObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          itemObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    timelineItems.forEach(function (el, idx) {
+      el.style.transitionDelay = (idx * 0.1) + 's';
+      itemObs.observe(el);
+    });
+  }
+
+  function runLoveMeter() {
+    var fill = document.getElementById('meterFill');
+    var valueEl = document.getElementById('meterValue');
+    var target = 999999999;
+    fill.style.width = '100%';
+
+    if (reduceMotion) {
+      valueEl.textContent = target.toLocaleString() + '%';
+      return;
+    }
+
+    var duration = 3200;
+    var start = null;
+    function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+
+    function step(ts) {
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = easeOutExpo(progress);
+      var current = Math.floor(eased * target);
+      valueEl.textContent = current.toLocaleString() + '%';
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        valueEl.textContent = target.toLocaleString() + '%';
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ---------------------------------------------------------
+     10. REPLY -> CLIPBOARD + INSTAGRAM
+  --------------------------------------------------------- */
+  var IG_URL = 'https://instagram.com/yourazz_.rishab';
+
+  document.getElementById('sendBtn').addEventListener('click', function () {
+    var box = document.getElementById('replyBox');
+    var toast = document.getElementById('sendToast');
+    var text = box.value.trim() || 'Yes, forever with you 💙🐬';
+
+    function done(success) {
+      toast.textContent = success
+        ? 'Message copied ❤️ Instagram is opening...'
+        : "Couldn't copy automatically — please copy your message and paste it in Instagram 🙏";
+      toast.classList.add('show');
+      window.open(IG_URL, '_blank', 'noopener');
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); })
+        .catch(function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  });
+
+  function fallbackCopy(text, cb) {
+    try {
+      var temp = document.createElement('textarea');
+      temp.value = text;
+      temp.style.position = 'fixed';
+      temp.style.opacity = '0';
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      var ok = document.execCommand('copy');
+      document.body.removeChild(temp);
+      cb(ok);
+    } catch (e) {
+      cb(false);
+    }
+  }
+
+})();
+</script>
+</body>
+</html>
