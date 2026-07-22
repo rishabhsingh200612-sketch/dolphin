@@ -238,6 +238,20 @@ body.custom-cursor-on, body.custom-cursor-on *{ cursor:none !important; }
   margin-bottom:32px; line-height:1.4;
 }
 
+/* ---- stage images (intro / stage1 / stage2) ---- */
+.stage-image{
+  width:132px; height:132px; border-radius:50%; object-fit:cover;
+  border:4px solid rgba(255,255,255,0.55);
+  box-shadow:0 14px 34px rgba(0,0,0,0.35);
+  margin:0 auto 22px; display:block;
+  animation:floatCard 4s ease-in-out infinite;
+}
+.hero-image{
+  width:150px; height:150px; margin-bottom:26px;
+}
+@media (prefers-reduced-motion: reduce){ .stage-image{ animation:none; } }
+@media (max-width:480px){ .stage-image{ width:104px; height:104px; } .hero-image{ width:120px; height:120px; } }
+
 /* game-box: enough height so the dodging NO button always has room
    clearly BELOW the YES button, never on top of it */
 .game-box{ position:relative; min-height:220px; }
@@ -529,6 +543,7 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
      INTRO SCREEN
      ============================================================ -->
 <section id="intro" class="overlay-screen active">
+  <img class="stage-image hero-image" src="hug.png" alt="A warm hug">
   <h1 class="hero-title">I Love You,<br>My Dolphin <span class="accent-heart">🐬</span></h1>
   <p class="hero-sub">I made a tiny world only for you...</p>
   <button type="button" class="primary-btn" id="startBtn">Start Our Little Journey ❤️</button>
@@ -539,6 +554,7 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
      ============================================================ -->
 <section id="stage1" class="overlay-screen" hidden>
   <div class="glass-card">
+    <img class="stage-image" src="hug%20(1).png" alt="A tight hug">
     <p class="question-text">Do you love me? 🥺</p>
     <div class="game-box">
       <div class="btn-anchor">
@@ -555,6 +571,7 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
      ============================================================ -->
 <section id="stage2" class="overlay-screen" hidden>
   <div class="glass-card">
+    <img class="stage-image" src="hug%20(2).png" alt="A gentle hug">
     <p class="question-text">Kya tum hamesha aise hi mera saath rahoge? 💙</p>
     <div class="game-box">
       <div class="btn-anchor">
@@ -572,6 +589,7 @@ textarea:focus{ border-color:var(--gold); background:rgba(255,255,255,0.12); }
 <main id="finalStage" class="final-stage" hidden>
 
   <section class="letter-section">
+    <img class="stage-image" src="hug.png" alt="A warm hug">
     <div class="big-heart" aria-hidden="true">💙</div>
     <p class="letter-text" id="letterText" aria-live="polite"><span class="type-cursor" id="typeCursor"></span></p>
   </section>
