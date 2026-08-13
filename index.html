@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>For You ❤️</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ================= CUSTOM CURSOR (desktop only) ================= -->
+<div class="cursor-heart" id="cursorHeart">❤️</div>
+
+<!-- ================= AMBIENT BACKGROUND (persists across whole page) ================= -->
+<div class="ambient-bg" id="ambientBg">
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="bokeh" id="bokehLayer"></div>
+  <div class="stars" id="starsLayer"></div>
+  <div class="floating-hearts" id="floatingHeartsLayer"></div>
+</div>
+
+<!-- ================= FLOATING MUSIC BUTTON ================= -->
+<div class="music-widget" id="musicWidget">
+  <button class="music-btn" id="musicBtn" aria-label="Toggle music">
+    <span class="music-icon">🎵</span>
+    <span class="music-bars"><i></i><i></i><i></i></span>
+  </button>
+  <span class="music-label">Our Song</span>
+</div>
+<audio id="bgMusic" loop preload="none"></audio>
+
+<!-- ================= PROGRESS DOT NAV ================= -->
+<div class="scroll-progress"><div class="scroll-progress-fill" id="scrollFill"></div></div>
+
+<main id="app">
+
+  <!-- ============================================================ -->
+  <!-- OPENING SCREEN -->
+  <!-- ============================================================ -->
+  <section class="screen intro-screen" id="introScreen">
+    <div class="intro-content">
+      <p class="eyebrow reveal-line">a little something for</p>
+      <h1 class="intro-title" id="introTitle">Heyyy <span id="nameSlot1">Meri Jaan</span> ❤️</h1>
+      <p class="typewriter-line" id="typeLine1"></p>
+      <p class="typewriter-line" id="typeLine2"></p>
+      <button class="glow-btn" id="openHeartBtn">
+        <span>Open My Heart</span> <span class="btn-heart">💖</span>
+      </button>
+    </div>
+    <div class="scroll-hint">↓</div>
+  </section>
+
+  <!-- everything below is hidden until she opens the heart -->
+  <div id="storyWrapper" class="story-wrapper">
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1 — THIS IS FOR YOU -->
+  <!-- ============================================================ -->
+  <section class="screen section-1" data-reveal>
+    <div class="center-card">
+      <h2 class="script-heading" data-reveal>Ye Sirf Ek Website Nahi Hai... ❤️</h2>
+      <p class="lead-text" data-reveal>Ye meri taraf se tere liye ek chhota sa surprise hai... 🥺💗</p>
+      <p class="lead-text soft" data-reveal>Toh please end tak dekhna... kyunki last mein ek important sawaal hai 👀💍</p>
+    </div>
+    <div class="scroll-indicator" data-reveal><span></span><span></span><span></span></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2 — INSTAGRAM PHOTO POSTS -->
+  <!-- ============================================================ -->
+  <section class="screen section-photos" id="section2">
+    <h2 class="section-title" data-reveal>Teri Kuch Beautiful Memories ❤️📸</h2>
+    <div class="post-grid" id="instaPostsGrid"><!-- injected by script.js --></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3 — INSTAGRAM REELS -->
+  <!-- ============================================================ -->
+  <section class="screen section-reels" id="section3">
+    <h2 class="section-title" data-reveal>Aur Tere Ye Cute Moments... 🎥❤️</h2>
+    <div class="reel-row" id="instaReelsRow"><!-- injected by script.js --></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 4 — WHY YOU -->
+  <!-- ============================================================ -->
+  <section class="screen section-why" id="section4">
+    <h2 class="section-title" data-reveal>Pata Hai Mujhe Tujhme Sabse Accha Kya Lagta Hai? 🥹❤️</h2>
+    <div class="why-lines">
+      <p class="why-line" data-reveal>Teri smile 😊❤️</p>
+      <p class="why-line" data-reveal>Tera cute sa gussa 😤😂</p>
+      <p class="why-line" data-reveal>Teri choti-choti baatein 🥺</p>
+      <p class="why-line" data-reveal>Tera mujhe special feel karwana 💗</p>
+      <p class="why-line" data-reveal>Tera woh cute sa attitude 😭❤️</p>
+      <p class="why-line small" data-reveal>Aur sabse zyada...</p>
+    </div>
+    <h1 class="giant-word" data-reveal>TU. ❤️</h1>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 5 — PHOTO MEMORY WALL -->
+  <!-- ============================================================ -->
+  <section class="screen section-wall" id="section5">
+    <h2 class="section-title" data-reveal>Our Memories 🥹💖</h2>
+    <div class="wall-grid" id="photoWall"><!-- injected by script.js --></div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 6 — EMOTIONAL MESSAGE -->
+  <!-- ============================================================ -->
+  <section class="screen section-emotional" id="section6">
+    <h2 class="section-title" data-reveal>Ek Baat Dil Se Kehni Hai... ❤️</h2>
+    <div class="emo-lines">
+      <p data-reveal>Shayad main har baar words mein express nahi kar pata...</p>
+      <p data-reveal>Lekin tu meri life ka woh beautiful part ban gayi hai jiske bina sab kuch thoda incomplete sa lagta hai. 🥺❤️</p>
+      <p data-reveal>Teri ek smile mera mood change kar deti hai...</p>
+      <p data-reveal>Teri ek baat mere face pe smile le aati hai...</p>
+      <p data-reveal>Aur tera hona hi mere liye bohot special hai. 💕</p>
+      <p class="mt" data-reveal>Main perfect nahi hoon...</p>
+      <p data-reveal>Kabhi stupid bhi lagta hoon 😂</p>
+      <p data-reveal>Kabhi tujhe irritate bhi karta hoon 😭😂</p>
+      <p data-reveal>But one thing is real...</p>
+    </div>
+    <h1 class="giant-word small-giant" data-reveal>I REALLY CARE ABOUT YOU. ❤️</h1>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 7 — MAIN PROPOSAL REVEAL -->
+  <!-- ============================================================ -->
+  <section class="screen section-proposal" id="section7">
+    <div class="proposal-heart" id="proposalHeart">❤️</div>
+    <p class="proposal-pre" data-reveal>Okay...</p>
+    <p class="proposal-pre" data-reveal>Ab woh baat...</p>
+    <p class="proposal-pre" data-reveal>Jo actually mujhe kehni thi... 🥺</p>
+    <h2 class="proposal-ask" data-reveal>I HAVE SOMETHING TO ASK YOU... ❤️</h2>
+    <h1 class="proposal-main" data-reveal>WILL YOU BE MINE? 💍❤️</h1>
+    <p class="proposal-sub" data-reveal>Not just for today...</p>
+    <p class="proposal-sub" data-reveal>But for all the beautiful tomorrows. 🥺❤️</p>
+
+    <div class="proposal-buttons" data-reveal>
+      <button class="yes-btn" id="yesBtn">YESSSS 🥹❤️</button>
+      <button class="think-btn" id="thinkBtn">Let Me Think 🙈</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- CELEBRATION OVERLAY -->
+  <!-- ============================================================ -->
+  <section class="screen celebration-screen" id="celebrationScreen">
+    <canvas id="celebrationCanvas"></canvas>
+    <div class="celebration-text">
+      <h1 class="celebrate-title">SHE SAID YESSSSS!!! 😭❤️🎉</h1>
+      <p data-reveal>Aaj toh main officially bohot zyada khush hoon 😭❤️</p>
+      <p data-reveal>Thank you for making my day... my week... and maybe my whole life a little more beautiful. 🥹💖</p>
+      <button class="continue-btn" id="continueBtn">Continue ↓</button>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 8 — FINAL LOVE LETTER -->
+  <!-- ============================================================ -->
+  <section class="screen section-letter" id="section8">
+    <h2 class="section-title" data-reveal>For The Girl Who Stole My Heart ❤️</h2>
+    <div class="letter-paper" data-reveal>
+      <p>Meri Jaan, ❤️</p>
+      <p>Thank you for being you.</p>
+      <p>Thank you for every smile, every conversation, every little moment, aur har woh memory jo mere liye special ban gayi. 🥺❤️</p>
+      <p>Mujhe nahi pata future exactly kaisa hoga...</p>
+      <p>But ek cheez pata hai —</p>
+      <p>Agar tum saath ho, toh journey definitely beautiful hogi. ❤️</p>
+      <p>Bas aise hi meri life mein rehna...</p>
+      <p>Thoda pyaar karna ❤️<br>Thoda pareshan karna 😂<br>Thoda gussa karna 😤<br>Aur bohot saari memories banana. 🥹💕</p>
+      <p>You are genuinely very special to me. ❤️</p>
+      <p class="letter-final">And yes... I REALLY REALLY LIKE YOU. 🥺❤️</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 9 — OUR LITTLE WORLD -->
+  <!-- ============================================================ -->
+  <section class="screen section-world" id="section9">
+    <h2 class="section-title" data-reveal>Our Little World ❤️✨</h2>
+    <div class="world-grid" id="worldGrid"><!-- injected by script.js --></div>
+    <p class="world-line" data-reveal>Bas ek request hai...</p>
+    <p class="world-line strong" data-reveal>Aise hi mere saath rehna. ❤️🥺</p>
+    <h2 class="giant-word small-giant" data-reveal>Deal? 🤝❤️</h2>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 10 — FINAL WHATSAPP -->
+  <!-- ============================================================ -->
+  <section class="screen section-whatsapp" id="section10">
+    <h2 class="section-title" data-reveal>Ab Ek Last Kaam Hai... 🥺❤️</h2>
+    <p class="lead-text" data-reveal>Itna sab dekhne ke baad ek message toh banta hai na? 👀💕</p>
+    <p class="lead-text soft" data-reveal>Mujhe WhatsApp pe batao... ❤️</p>
+
+    <a href="#" id="whatsappBtn" target="_blank" rel="noopener noreferrer" class="whatsapp-btn" data-reveal>
+      <span class="wa-icon">💚</span> Message Me On WhatsApp 💬
+    </a>
+
+    <p class="cute-note" data-reveal>Bas ek message kar dena... baaki smile main khud kar lunga 😭❤️😂</p>
+    <p class="cute-note strong" data-reveal>I'll be waiting... 👀💚</p>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FINAL END SCREEN -->
+  <!-- ============================================================ -->
+  <section class="screen end-screen" id="endScreen">
+    <h1 class="end-title" data-reveal>Thank You For Coming Till The End ❤️🥺</h1>
+    <p class="typewriter-line" id="endTypeLine"></p>
+    <h1 class="giant-word end-giant" data-reveal>LOVE YOUUU ❤️💍🥹</h1>
+    <p class="made-with" data-reveal>Made with ❤️ just for you.</p>
+    <div class="tiny-heart">💗</div>
+  </section>
+
+  </div><!-- /storyWrapper -->
+
+</main>
+
+<!-- ================= "LET ME THINK" POPUP ================= -->
+<div class="popup-overlay" id="thinkPopup">
+  <div class="popup-card">
+    <p>Achaaa 😭😂</p>
+    <p>Itna sochna padega kya?<br>Main toh already dil de chuka hoon ❤️</p>
+    <button class="popup-btn" id="popupOkBtn">Okay Okay 😂❤️</button>
+  </div>
+</div>
+
+<!-- ================= INSTAGRAM FALLBACK CARD TEMPLATE (used via JS) ================= -->
+<template id="fallbackCardTemplate">
+  <div class="fallback-card">
+    <div class="fallback-glow"></div>
+    <p class="fallback-text">Ek cute sa moment tumhara wait kar raha hai 👀❤️</p>
+    <a class="fallback-btn" href="#" target="_blank" rel="noopener noreferrer">Watch This On Instagram ❤️</a>
+  </div>
+</template>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
